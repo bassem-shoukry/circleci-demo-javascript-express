@@ -5,6 +5,10 @@ workflows:
   build:
     jobs:
       - build
+      - save_hello_world_output
+      - print_output_file:
+          requires:
+            - save_hello_world_output
 
 jobs:
   build:
@@ -34,9 +38,26 @@ jobs:
           command: './node_modules/.bin/nyc report --reporter=text-lcov'
       - store_artifacts:
           path: test-results.xml
-          prefix: tests
       - store_artifacts:
           path: coverage
-          prefix: coverage
       - store_test_results:
           path: test-results.xml
+
+  save_hello_world_output:
+    docker:
+      -  image: circleci/node:13:8.0
+    steps:
+      - run: echo "hello world" > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.text
+
+  print_output_file:
+    docker:
+      - image: circleci/node:13:8:0
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: cat ~/output.text
+
