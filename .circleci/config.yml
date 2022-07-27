@@ -1,5 +1,12 @@
 version: 2.1
-
+commands:
+  print_pipeline_id:
+    description: "A very simple command for demonstration purposes"
+    parameters:
+      id:
+        type: string
+    steps:
+      - run: echo << parameters.id >>
 workflows:
   version: 2
   build:
@@ -42,7 +49,6 @@ jobs:
           path: coverage
       - store_test_results:
           path: test-results.xml
-
   save_hello_world_output:
     docker:
       -  image: circleci/node:13.8.0
@@ -52,7 +58,6 @@ jobs:
           root: ~/
           paths:
             - output.txt
-
   print_output_file:
     docker:
       - image: circleci/node:13.8.0
@@ -60,4 +65,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - run: cat ~/output.txt
-
+  my_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - print_pipeline_id:
+          id: <<pipline.id>>
