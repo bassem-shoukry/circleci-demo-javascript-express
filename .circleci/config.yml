@@ -17,6 +17,7 @@ workflows:
           requires:
             - save_hello_world_output
       - my_job
+      - my_job_fail
 jobs:
   build:
     working_directory: ~/mern-starter
@@ -71,3 +72,12 @@ jobs:
     steps:
       - print_pipeline_id:
           id: << pipeline.id >>
+  my_job_fail:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run: exit 1
+      - run:
+          name: on error
+          command: echo "Hello World!"
+          when: on_fail
