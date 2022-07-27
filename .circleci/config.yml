@@ -16,7 +16,7 @@ workflows:
       - print_output_file:
           requires:
             - save_hello_world_output
-
+      - my_job
 jobs:
   build:
     working_directory: ~/mern-starter
