@@ -70,4 +70,4 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - print_pipeline_id:
-          id: <<pipline.id>>
+          id: << pipeline.id >>
